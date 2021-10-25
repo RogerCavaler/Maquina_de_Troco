@@ -1,0 +1,80 @@
+﻿@model IEnumerable<MQTroco.Models.CaixaModel>
+
+@{
+    ViewData["Title"] = "Caixa";
+}
+
+@if (Model.Where(w => w.Status).Count() > 0)
+{
+    <h2>Caixa aberto</h2>
+}
+
+<p>
+    @if (Model.Where(w => w.Status).Count() == 0)
+    {
+        <a class="btn btn-success" asp-action="Create">Abrir caixa</a>
+    }
+
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataAbertura)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataFechamento)
+            </th>
+            <th>
+                Saldo
+            </th>
+            <th>
+                Status
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataAbertura)
+                </td>
+                <td>
+                    @if(item.DataFechamento != new DateTime())
+                    @Html.DisplayFor(modelItem => item.DataFechamento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Saldo)
+                </td>
+                <td>
+                    @if (item.Status)
+                    {
+                        <text>Aberto</text>
+                    }
+                    else
+                    {
+                        <text>Fechado</text>
+                    }
+                </td>
+                <td>
+                    @if (item.Status)
+                    {
+                        @Html.ActionLink("Abastecer Caixa", "Abastecimento", new { idcaixa = item.Id })
+                        <br>
+                        @Html.ActionLink("Realizar Sangria", "Sangria", new { idcaixa = item.Id })
+                        <br>
+                        @Html.ActionLink("Fechar Caixa", "Encerrar", new { idcaixa = item.Id })
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

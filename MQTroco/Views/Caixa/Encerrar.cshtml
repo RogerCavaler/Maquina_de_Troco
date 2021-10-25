@@ -1,0 +1,31 @@
+﻿@model MQTroco.Models.CaixaModel
+@{
+    ViewData["Title"] = "Abastecimento";
+}
+
+<h1>Confirmar fechamento do caixa?</h1>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Encerrar" asp-m method="Post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input readonly asp-for="Id" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Realizar fechamento do caixa" class="btn btn-danger" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Voltar</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

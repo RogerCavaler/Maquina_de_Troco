@@ -1,0 +1,47 @@
+﻿@model MQTroco.ViewModels.CaixaMoedaViewModel
+@{
+    ViewData["Title"] = "Abastecimento";
+}
+
+<h2>Abastecer caixa</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Abastecimento" method="Post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" hidden>
+                <label asp-for="Caixa.Id" class="control-label"></label>
+                <input asp-for="Caixa.Id" class="form-control" />
+            </div>
+            @for (int i = 0; i < Model.CaixaMoedas.Count(); i++)
+            {
+                <div class="row">
+                    <div class="col-4 col-sm-4 col-md-4 col-lg-2 col-xl-2">
+                        <div class="form-group">
+                            <label class="control-label">@Model.CaixaMoedas[i].MoedaModel.Descricao</label>
+                        </div>
+                    </div>
+                    <div class="col-4 col-sm-4 col-md-4 col-lg-2 col-xl-2">
+                        <div class="form-group">
+                            <input asp-for="CaixaMoedas[i].QtdMoeda" name="@Model.CaixaMoedas[i].MoedaModel.Id" class="form-control" />
+                            <span asp-validation-for="CaixaMoedas[i].QtdMoeda" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="form-group">
+                <input type="submit" value="Abastecer" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Voltar</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

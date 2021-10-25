@@ -1,0 +1,72 @@
+﻿@model MQTroco.ViewModels.TrocoViewModel
+@{
+    ViewData["Title"] = "Troco";
+}
+
+<h2>Calcular troco</h2>
+<p>Os valores informados devem conter duas cassas decimais separado por ',' (vírgula)</p>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Calcular" method="Post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" hidden>
+                <label asp-for="Caixa.Id" class="control-label"></label>
+                <input asp-for="Caixa.Id" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Valor" class="control-label"></label>
+                <input type="number" min="0" step="0.01" asp-for="Valor" class="form-control" />
+                <span asp-validation-for="Valor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ValorPago" class="control-label"></label>
+                <input type="number" min="0" step="0.01" asp-for="ValorPago" class="form-control" />
+                <span asp-validation-for="ValorPago" class="text-danger"></span>
+            </div>
+
+            @if (Model.CaixaMoedas.Where(w => w.QtdMoeda > 0).Count() > 0)
+            {
+                <hr />
+                <div class="row">
+                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <label><b>Moeda</b></label>
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <label><b>Quantidade</b></label>
+                    </div>
+                </div>
+            }
+            @foreach (var moeda in Model.CaixaMoedas.Where(w => w.QtdMoeda > 0))
+            {
+                <div class="row">
+                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            <label class="control-label">@moeda.MoedaModel.Descricao</label>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            <label class="control-label">@moeda.QtdMoeda</label>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @if (Model.CaixaMoedas.Count() > 0)
+            {
+                <h1>Troco R$ @Model.CaixaMoedas.Where(w => w.QtdMoeda > 0).Sum(s => (s.QtdMoeda * s.MoedaModel.Valor)).ToString("N2")</h1>
+            }
+
+            <div class="form-group">
+                <input type="submit" value="Calcular" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
